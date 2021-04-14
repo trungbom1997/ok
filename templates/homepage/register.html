@@ -1,0 +1,22 @@
+{% extends "homepage/base.html" %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+<div class="container-fluid">
+    <div class="col-sm-12">
+        <div class="col-sm-6">
+            <h2>Register</h2>
+            <form action="." method="POST">
+                {% csrf_token %}
+                {{form|crispy}}
+
+                {{mess}}
+                <input class="btn btn-success" value="Add" type="submit">
+            </form>
+        </div>
+
+    </div>
+</div>
+
+
+{% endblock %}

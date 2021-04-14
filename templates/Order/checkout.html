@@ -1,0 +1,129 @@
+{% extends "homepage/base.html" %}
+{% block content %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load mathfilters %}
+
+<div class="cart-page" xmlns="http://www.w3.org/1999/html">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="cart-page-inner">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="thead-dark">
+                            <tr>
+
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                            </tr>
+                            </thead>
+                            <tbody class="align-middle">
+
+                            {% for key,value in request.session.cart.items %}
+                            <tr>
+
+                                <td>
+                                    <div class="img">
+                                        <a href=""><img src="/media/{{ value.image }}" alt="Image"></a>
+                                        <p>{{ value.name }}</p>
+                                    </div>
+                                </td>
+                                <td>${{ value.price }}</td>
+                                <td>{{ value.num }}</td>
+                                <td>${{value.price|mul:value.num}}</td>
+
+                            </tr>
+
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                 <div class="col-lg-12">
+                <div class="cart-page-inner">
+
+                    <button class="btn btn-secondary" onclick="openForm()">Change your address</button><br>
+                    <span>Full name :{{ vcl.customer.user }}: {{ vcl.address_ship }}, {{ vcl.phone_ship }}, {{ vcl.customer.email }}</span>
+                    <div class="form-popup" id="myForm" style="display: none">
+                        <button type="button" class="btn cancel" onclick="openForm1()"
+                                style="float:right;margin-top:-40px">Add new address
+                        </button>
+                        <form action="" class="form-container">
+                            <h2>List of address</h2>
+                            <h6>Shipping address :
+                                {% for add in addship %}
+
+                                <div class="form-check">
+                                    <input value="{{add.id}}" {% if add.id == vcl.id %}checked="checked" {%endif%} class="form-check-input" type="radio" name="gender"
+                                           id="flexRadioDefault1">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                          <span>{{ add.customer.user }}: {{ add.address_ship }}, {{ add.phone_ship }}, {{ add.customer.email }}</span>
+                                    </label>
+                                </div>
+                                <br>
+
+                                {% endfor %}
+                            </h6>
+
+
+                            <button type="button" class="btn cancel" onclick="closeForm()">OK</button>
+                        </form>
+                    </div>
+                </div>
+
+
+            </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="cart-page-inner">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="coupon">
+                                <input type="text" placeholder="Coupon Code">
+                                <button>Apply Code</button>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="cart-summary">
+                                <div class="cart-content">
+                                    <h1>Cart Summary</h1>
+                                    <p>Sub Total<span>$99</span></p>
+                                    <p>Shipping Cost<span>$1</span></p>
+                                    <h2>Grand Total<span>${{total}}</span></h2>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4" id="myForm-hai" style="display:none">
+                <h2>Register</h2>
+
+                    <input id="addressship" class="form-control">
+                    <input id="phoneship" class="form-control">
+                    <input type="submit" class="btn btn-success" onclick="closeForm1()" value="OK"></input
+
+
+            </div>
+
+        </div>
+        <div class="col-lg-12">
+                <div class="col-lg-4">
+                    <div class="cart-btn">
+                        <form method="POST" action="{% url 'Order:payment' %}">
+                             {% csrf_token %}
+                        <input type="hidden" name="idshipping" value="{{ vcl.id }}">
+                        <input  type="submit" name="submit" value="CHECK OUT" class="btn btn-success"></input>
+
+                        </form>
+                </div>
+            </div>
+            </div>
+    </div>
+
+    {% endblock %}

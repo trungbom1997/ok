@@ -1,0 +1,193 @@
+{% extends "homepage/base.html" %}
+{% block content %}
+{% load static %}
+
+<!-- Main Slider Start -->
+
+
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+
+
+    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+        <div class="navbar-nav mr-auto">
+            {% for item in cate %}
+            {% if item.catedetail is None %}
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{ item.name_cate }}</a>
+                <div class="dropdown-menu">
+                    {% for item2 in cate %}
+                    {% if item2.catedetail.name_cate == item.name_cate %}
+                    <a href="{% url 'homepage:category' item2.name_cate|slugify %}" class="dropdown-item">{{item2.name_cate}}</a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+
+            </div>
+            {% endif %}
+            {% endfor %}
+
+        </div>
+
+    </div>
+</nav>
+
+
+<!-- Main Slider End -->
+
+
+<!-- Featured Product Start -->
+<div class="featured-product product">
+    <div class="container-fluid">
+        <div class="section-header">
+            <h1>Featured Product</h1>
+        </div>
+        <div class="row align-items-center product-slider product-slider-4">
+            {% for item in pro %}
+
+            <div class="col-lg-3">
+                <div class="product-item">
+                    <div class="product-title">
+                        <a href="{% url 'Product:detail' item.id %}">{{ item.name_pro }}</a>
+                        <div class="ratting">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="product-image">
+                        <a href="product-detail.html">
+                            <img src="{{ item.image_pro.url }}" alt="Product Image">
+                        </a>
+                        <div class="product-action">
+                            <a href="#"><i class="fa fa-cart-plus"></i></a>
+                            <a href="#"><i class="fa fa-heart"></i></a>
+                            <a href="#"><i class="fa fa-search"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-price">
+                        <h3><span>$</span>{{ item.price_pro }}</h3>
+                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- Featured Product End -->
+
+<div class="container-fluid">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination pull-right">
+
+            {% if pro.has_previous %}
+            <li><a href="?{% if key %}keyword={{key}}&{% endif %}page={{ pro.previous_page_number }}">&laquo;</a></li>
+            {% else %}
+            <li class="disabled"><span>&laquo;</span></li>
+            {% endif %}
+
+            {% if pro.number > 5 %}
+            <li><a href="?{% if key %}keyword={{key}}&{% endif %}page=1"><i>1</i></a></li>
+            {% endif %}
+
+            {% for i in pro.paginator.page_range %}
+            {% if i > pro.number|add:"-5" %}
+            {% if i < pro.number|add:"5" %}
+            {% if pro.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+            {% else %}
+            <li><a href="?{% if key %}keyword={{key}}&{% endif %}page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+
+            {% if pro.number < pro.paginator.num_pages|add:"-5" %}
+            <li><a href="?{% if key %}keyword={{key}}&{% endif %}page={{ pro.paginator.num_pages }}"><i>{{ pro.paginator.num_pages }}</i></a></li>
+            {% endif %}
+
+            {% if pro.has_next %}
+            <li><a href="?{% if key %}keyword={{key}}&{% endif %}page={{ orders.next_page_number }}">&raquo;</a></li>
+            {% else %}
+            <li class="disabled"><span>&raquo;</span></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+</div>
+
+<!-- Recent Product Start -->
+<div class="recent-product product">
+    <div class="container-fluid">
+        <div class="section-header">
+            <h1>Recent Product</h1>
+        </div>
+        <div class="row align-items-center product-slider product-slider-4">
+            <div class="col-lg-3">
+                <div class="product-item">
+                    <div class="product-title">
+                        <a href="#">Product Name</a>
+                        <div class="ratting">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="product-image">
+                        <a href="product-detail.html">
+                            <img src="{% static 'homepage/img/product-6.jpg' %} " alt="Product Image">
+                        </a>
+                        <div class="product-action">
+                            <a href="#"><i class="fa fa-cart-plus"></i></a>
+                            <a href="#"><i class="fa fa-heart"></i></a>
+                            <a href="#"><i class="fa fa-search"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-price">
+                        <h3><span>$</span>99</h3>
+                        <a class="btn" href=""><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Recent Product End -->
+
+<!-- Review Start -->
+<div class="review">
+    <div class="container-fluid">
+        <div class="row align-items-center review-slider normal-slider">
+            <div class="col-md-6">
+                <div class="review-slider-item">
+                    <div class="review-img">
+                        <img src="{% static 'homepage/img/review-1.jpg' %} " alt="Image">
+                    </div>
+                    <div class="review-text">
+                        <h2>Customer Name</h2>
+                        <h3>Profession</h3>
+                        <div class="ratting">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vitae nunc eget leo
+                            finibus luctus et vitae lorem
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Review End -->
+{% endblock %}
